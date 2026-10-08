@@ -2,123 +2,119 @@
 
 import { useState, type KeyboardEvent } from "react";
 import { useVerde, type StatusLine } from "./VerdeProvider";
-import { Card, Terminal } from "./ui";
+import { Badge, Card, ChatThread, Icon } from "./ui";
 
-function Status({ label, line }: { label: string; line: StatusLine }) {
+function Diag({ label, line }: { label: string; line: StatusLine }) {
   return (
-    <div className="status-row">
-      <span className="muted mono small">{label}</span>
-      <span className={`mono small ${line ? (line.ok ? "ok" : "err") : "muted"}`}>{line?.text ?? "—"}</span>
+    <div className="diag">
+      <span className="muted small">{label}</span>
+      <span className={`mono small ${line ? (line.ok ? "ok" : "err") : "muted"}`}>{line?.text ?? "not tested"}</span>
     </div>
   );
 }
 
-function ChatInput({
-  value,
-  onChange,
-  onSend,
+function Composer({
   placeholder,
   disabled,
+  onSend,
+  tone,
 }: {
-  value: string;
-  onChange: (v: string) => void;
-  onSend: () => void;
   placeholder: string;
-  disabled?: boolean;
+  disabled: boolean;
+  onSend: (text: string) => void;
+  tone: "green" | "purple";
 }) {
-  const onKey = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) onSend();
+  const [q, setQ] = useState("");
+  const send = () => {
+    const t = q.trim();
+    if (!t || disabled) return;
+    setQ("");
+    onSend(t);
+  };
+  const onKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
   };
   return (
-    <input
-      className="chat-in"
-      value={value}
-      placeholder={placeholder}
-      disabled={disabled}
-      onChange={(e) => onChange(e.target.value)}
-      onKeyDown={onKey}
-    />
+    <div className="composer">
+      <textarea
+        rows={1}
+        value={q}
+        placeholder={placeholder}
+        disabled={disabled}
+        onChange={(e) => setQ(e.target.value)}
+        onKeyDown={onKey}
+        aria-label={placeholder}
+      />
+      <button className={`btn ${tone} icon-send`} onClick={send} disabled={disabled || !q.trim()} aria-label="Send">
+        <Icon name="send" size={16} />
+      </button>
+    </div>
   );
 }
 
 function GeminiCard() {
   const { aiLines, aiBusy, sendGemini, currentImage, testWeather, testRouter, pingDB, status } = useVerde();
-  const [q, setQ] = useState("");
-  const send = () => {
-    const text = q;
-    setQ("");
-    void sendGemini(text);
-  };
   return (
     <Card
-      span2
-      title={<>🧠 Gemini 2.5 Flash — chat with image context</>}
-      right={<span className="muted mono small">{currentImage ? `image: ${currentImage.name}` : "no image"}</span>}
+      className="chat-card"
+      title="Gemini · image chat"
+      icon="leaf"
+      right={<Badge tone={currentImage ? "info" : "idle"}>{currentImage ? currentImage.name : "no image"}</Badge>}
     >
-      <Terminal lines={aiLines} busy={aiBusy} height={240} />
-      <div className="chat-row">
-        <ChatInput
-          value={q}
-          onChange={setQ}
-          onSend={send}
-          disabled={aiBusy}
-          placeholder="Ask about the plant photo… (e.g. 'what disease is this?' 'should I water it?')"
-        />
-        <button className="btn green" onClick={send} disabled={aiBusy || !q.trim()}>
-          Ask Gemini
-        </button>
+      <ChatThread lines={aiLines} busy={aiBusy} height={380} assistantName="Gemini" />
+      <Composer
+        tone="green"
+        disabled={aiBusy}
+        placeholder="Ask about the plant… e.g. ‘what disease is this?’ or ‘should I water it?’"
+        onSend={(t) => void sendGemini(t)}
+      />
+      <div className="diag-row">
+        <button className="btn ghost sm" onClick={() => void testWeather()}>Weather API</button>
+        <button className="btn ghost sm" onClick={() => void testRouter()}>OpenRouter</button>
+        <button className="btn ghost sm" onClick={() => void pingDB()}>Firebase</button>
       </div>
-      <div className="btn-row">
-        <button className="btn" onClick={() => void testWeather()}>🌦️ Weather</button>
-        <button className="btn" onClick={() => void testRouter()}>🛰️ OpenRouter</button>
-        <button className="btn" onClick={() => void pingDB()}>🔥 Firebase ping</button>
-      </div>
-      <div className="status-list">
-        <Status label="weather" line={status.weather} />
-        <Status label="openrouter" line={status.router} />
-        <Status label="firebase" line={status.db} />
+      <div className="diags">
+        <Diag label="weather" line={status.weather} />
+        <Diag label="openrouter" line={status.router} />
+        <Diag label="firebase" line={status.db} />
       </div>
     </Card>
   );
 }
 
 const QUICK = [
-  ["💧 Moisture check", "What is the current soil moisture and is it healthy?"],
-  ["💦 Should I water?", "Should I water the plant right now? Explain using the thresholds."],
-  ["🛢️ Tank safety", "Is the reservoir tank safe? What happens if it is empty?"],
-  ["🏆 Judge summary", "Summarize the whole system status for a judge."],
+  ["Moisture check", "What is the current soil moisture and is it healthy?"],
+  ["Should I water?", "Should I water the plant right now? Explain using the thresholds."],
+  ["Tank safety", "Is the reservoir tank safe? What happens if it is empty?"],
+  ["Judge summary", "Summarize the whole system status for a judge."],
 ] as const;
 
 function OpenRouterCard() {
   const { orLines, orBusy, sendOpenRouter, orQuick } = useVerde();
-  const [q, setQ] = useState("");
-  const send = () => {
-    const text = q;
-    setQ("");
-    void sendOpenRouter(text);
-  };
   return (
-    <Card span2 title="🤖 Sensor-aware chat (OpenRouter) — knows your live ESP32 + database">
-      <Terminal lines={orLines} busy={orBusy} tone="sky" height={220} />
-      <div className="btn-row">
+    <Card className="chat-card" title="Sensor-aware assistant" icon="pulse" right={<Badge tone="info">OpenRouter</Badge>}>
+      <ChatThread
+        lines={orLines.length ? orLines : []}
+        busy={orBusy}
+        height={320}
+        assistantName="Sensor AI"
+      />
+      <div className="chips">
         {QUICK.map(([label, question]) => (
-          <button key={label} className="btn" disabled={orBusy} onClick={() => orQuick(question)}>
+          <button key={label} className="chip-btn" disabled={orBusy} onClick={() => orQuick(question)}>
             {label}
           </button>
         ))}
       </div>
-      <div className="chat-row">
-        <ChatInput
-          value={q}
-          onChange={setQ}
-          onSend={send}
-          disabled={orBusy}
-          placeholder="Ask anything about the live sensor/app data…"
-        />
-        <button className="btn purple" onClick={send} disabled={orBusy || !q.trim()}>
-          Ask OpenRouter
-        </button>
-      </div>
+      <Composer
+        tone="purple"
+        disabled={orBusy}
+        placeholder="Ask about your live sensors, controls or database…"
+        onSend={(t) => void sendOpenRouter(t)}
+      />
     </Card>
   );
 }
@@ -126,9 +122,9 @@ function OpenRouterCard() {
 export default function AiAssistants() {
   return (
     <div className="page-body">
-      <div className="grid">
-        <GeminiCard />
-        <OpenRouterCard />
+      <div className="dash-grid">
+        <div className="c-6"><GeminiCard /></div>
+        <div className="c-6"><OpenRouterCard /></div>
       </div>
     </div>
   );

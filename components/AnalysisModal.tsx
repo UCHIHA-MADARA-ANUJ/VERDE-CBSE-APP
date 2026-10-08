@@ -2,7 +2,7 @@
 
 import { useState, type KeyboardEvent } from "react";
 import { useVerde } from "./VerdeProvider";
-import { AnalysisView, Terminal } from "./ui";
+import { AnalysisView, ChatThread, Icon } from "./ui";
 
 export default function AnalysisModal() {
   const { modal, closeModal, sendModalGemini, analysis } = useVerde();
@@ -10,11 +10,12 @@ export default function AnalysisModal() {
   if (!modal.open || !modal.image) return null;
 
   const img = modal.image;
-  const a = analysis.src === img.src ? analysis : { ...analysis, status: "idle" as const };
+  const a = analysis.src === img.src ? analysis : { src: null, status: "idle" as const, crops: [], diseases: [] };
   const send = () => {
-    const text = q;
+    const t = q.trim();
+    if (!t || modal.busy) return;
     setQ("");
-    void sendModalGemini(text);
+    void sendModalGemini(t);
   };
   const onKey = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") send();
@@ -22,37 +23,41 @@ export default function AnalysisModal() {
 
   return (
     <div className="overlay" onClick={closeModal}>
-      <div className="sheet analysis-sheet" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+      <div className="sheet analysis-sheet" role="dialog" aria-modal="true" aria-label="Plant analysis" onClick={(e) => e.stopPropagation()}>
         <div className="sheet-h">
-          <h3>🌿 Plant analysis · <span className="muted">{img.name}</span></h3>
-          <button className="icon-btn" onClick={closeModal} aria-label="Close">✕</button>
+          <div>
+            <div className="crumb mono">PLANT ANALYSIS</div>
+            <h3>{img.name}</h3>
+          </div>
+          <button className="icon-btn" onClick={closeModal} aria-label="Close"><Icon name="close" size={16} /></button>
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="modal-img"
-          src={img.src}
-          alt="analysis"
-          style={{ transform: img.source === "cam" ? "rotate(180deg)" : "none" }}
-        />
+        <div className="sheet-split">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="modal-img"
+            src={img.src}
+            alt="analysis"
+            style={{ transform: img.source === "cam" ? "rotate(180deg)" : "none" }}
+          />
+          <div className="panel-plain"><AnalysisView a={a} /></div>
+        </div>
 
-        <div className="panel"><AnalysisView a={a} /></div>
-
-        <Terminal lines={modal.chat} busy={modal.busy} height={170} />
-        <div className="chat-row">
+        <ChatThread lines={modal.chat} busy={modal.busy} height={220} assistantName="Gemini" />
+        <div className="composer">
           <input
-            className="chat-in"
+            className="plain-in"
             value={q}
-            placeholder="Ask about THIS plant photo…"
+            placeholder="Ask about this plant photo…"
             disabled={modal.busy}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={onKey}
+            aria-label="Ask about this photo"
           />
-          <button className="btn green" onClick={send} disabled={modal.busy || !q.trim()}>
-            Ask
+          <button className="btn green icon-send" onClick={send} disabled={modal.busy || !q.trim()} aria-label="Send">
+            <Icon name="send" size={16} />
           </button>
         </div>
-        <div className="hint">Gemini sees this image and the Crop.health result above.</div>
       </div>
     </div>
   );

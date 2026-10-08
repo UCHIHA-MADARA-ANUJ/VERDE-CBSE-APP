@@ -1,76 +1,119 @@
 "use client";
 
-import { useEffect, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { APP_VERSION } from "@/lib/config";
 import AiAssistants from "./AiAssistants";
 import AnalysisModal from "./AnalysisModal";
+import Boot from "./Boot";
 import Dashboard from "./Dashboard";
 import { GraphModal, HoverGraph } from "./Graphs";
 import PlantDoctor from "./PlantDoctor";
 import { useVerde, VerdeProvider, type PageId, type PollState } from "./VerdeProvider";
+import { Icon } from "./ui";
 import Weather from "./Weather";
 
-const PAGES: { id: PageId; icon: string; label: string; hint: string }[] = [
-  { id: "dashboard", icon: "📡", label: "Dashboard", hint: "telemetry · controls · status" },
-  { id: "weather", icon: "🌦️", label: "Weather", hint: "auto rain override" },
-  { id: "doctor", icon: "🌿", label: "Plant Doctor", hint: "capture · analyse · photo" },
-  { id: "ai", icon: "🧠", label: "AI Assistants", hint: "Gemini · OpenRouter chats" },
+const PAGES: { id: PageId; icon: string; label: string; title: string }[] = [
+  { id: "dashboard", icon: "grid", label: "Dashboard", title: "Sensory telemetry" },
+  { id: "weather", icon: "cloud", label: "Weather", title: "Weather & rain override" },
+  { id: "doctor", icon: "leaf", label: "Plant Doctor", title: "Plant Doctor" },
+  { id: "ai", icon: "chat", label: "AI Assistants", title: "AI assistants" },
 ];
 
-function PollPill({ state }: { state: PollState }) {
-  const map: Record<PollState, { cls: string; text: string }> = {
-    connecting: { cls: "off", text: "⏳ CONNECTING…" },
-    live: { cls: "live", text: "● FIREBASE LIVE" },
-    offline: { cls: "bad", text: "✗ OFFLINE" },
-  };
-  const m = map[state];
-  return <span className={`status-pill ${m.cls}`}>{m.text}</span>;
-}
-
-function Header() {
-  const { setNavOpen, navOpen, pollState } = useVerde();
+function Clock() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
   return (
-    <header className="topbar">
-      <button className="burger" onClick={() => setNavOpen(!navOpen)} aria-label="Menu" aria-expanded={navOpen}>
-        ☰
-      </button>
-      <div className="brand">
-        <div className="brand-t">
-          PROJECT VERDE <span>FINAL APP</span>
-        </div>
-        <div className="brand-s">
-          <span className="chip-green">DEMO-READY {APP_VERSION.replace("FINAL-DEMO-", "")}</span>
-          <span className="muted mono small">Next.js · secure server proxy</span>
-        </div>
-      </div>
-      <PollPill state={pollState} />
-    </header>
+    <span className="mono clock" suppressHydrationWarning>
+      {now.toLocaleTimeString("en-GB", { timeZone: "Asia/Kolkata" })} <span className="muted">IST</span>
+    </span>
   );
 }
 
-function NavDrawer() {
-  const { navOpen, setNavOpen, page, setPage, triggerCamCapture, checkWeather } = useVerde();
+function LinkPill({ state }: { state: PollState }) {
+  const map: Record<PollState, { cls: string; text: string }> = {
+    connecting: { cls: "wait", text: "Connecting" },
+    live: { cls: "live", text: "Firebase live" },
+    offline: { cls: "bad", text: "Offline" },
+  };
+  const m = map[state];
+  return (
+    <span className={`link-pill ${m.cls}`}>
+      <i />
+      {m.text}
+    </span>
+  );
+}
+
+function Sidebar() {
+  const { page, setPage, navOpen, setNavOpen, triggerCamCapture, checkWeather, pollState } = useVerde();
   return (
     <>
       <div className={`backdrop ${navOpen ? "open" : ""}`} onClick={() => setNavOpen(false)} />
-      <nav className={`drawer ${navOpen ? "open" : ""}`} aria-label="Main">
-        <div className="drawer-h">Menu</div>
-        {PAGES.map((p) => (
-          <button key={p.id} className={`nav-item ${page === p.id ? "active" : ""}`} onClick={() => setPage(p.id)}>
-            <span>{p.icon} {p.label}</span>
-            <small>{p.hint}</small>
+      <aside className={`sidebar ${navOpen ? "open" : ""}`} aria-label="Main navigation">
+        <div className="brand">
+          <div className="brand-mark"><Icon name="leaf" size={20} /></div>
+          <div>
+            <div className="brand-t">PROJECT VERDE</div>
+            <div className="brand-s">OS <span>V3.0</span> · Autonomous Plant</div>
+          </div>
+        </div>
+
+        <div className="nav-label">Navigate</div>
+        <nav className="nav">
+          {PAGES.map((p) => (
+            <button key={p.id} className={`nav-item ${page === p.id ? "active" : ""}`} onClick={() => setPage(p.id)}>
+              <Icon name={p.icon} size={18} />
+              <span>{p.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="nav-label">Quick actions</div>
+        <div className="quick">
+          <button className="quick-btn" onClick={() => { setNavOpen(false); void triggerCamCapture(); }}>
+            <Icon name="camera" size={16} /> Capture
           </button>
-        ))}
-        <div className="drawer-h">Quick</div>
-        <button className="nav-item" onClick={() => { setNavOpen(false); void triggerCamCapture(); }}>
-          📸 Capture photo
-        </button>
-        <button className="nav-item" onClick={() => { setNavOpen(false); void checkWeather(true); }}>
-          🔍 Check weather
-        </button>
-        <div className="drawer-foot">v{APP_VERSION}</div>
-      </nav>
+          <button className="quick-btn" onClick={() => { setNavOpen(false); void checkWeather(true); }}>
+            <Icon name="refresh" size={16} /> Weather
+          </button>
+        </div>
+
+        <div className="sidebar-foot">
+          <LinkPill state={pollState} />
+          <div className="muted mono small">v{APP_VERSION}</div>
+        </div>
+      </aside>
     </>
+  );
+}
+
+function Topbar() {
+  const { page, setNavOpen, navOpen, pollState, rain, weather, toggleFullscreen } = useVerde();
+  const meta = PAGES.find((p) => p.id === page);
+  return (
+    <header className="topbar">
+      <button className="burger" onClick={() => setNavOpen(!navOpen)} aria-label="Open menu" aria-expanded={navOpen}>
+        <Icon name="menu" size={20} />
+      </button>
+      <div className="page-title">
+        <div className="crumb mono">VERDE OS / {meta?.label}</div>
+        <h1>{meta?.title}</h1>
+      </div>
+      <div className="top-right">
+        {rain && <span className="chip chip-rain"><Icon name="drop" size={13} /> Rain override</span>}
+        {weather.current && (
+          <span className="chip"><Icon name="cloud" size={13} /> {weather.current.temp}°C · {weather.current.city}</span>
+        )}
+        <div className="hide-sm"><LinkPill state={pollState} /></div>
+        <div className="hide-sm"><Clock /></div>
+        <button className="icon-btn" onClick={toggleFullscreen} aria-label="Toggle fullscreen" title="Fullscreen">
+          <Icon name="gauge" size={16} />
+        </button>
+      </div>
+    </header>
   );
 }
 
@@ -98,7 +141,6 @@ function FileInput() {
 function Shell() {
   const { page, navOpen, setNavOpen, graphKey, setGraphKey, modal, closeModal } = useVerde();
 
-  // Esc closes the topmost overlay.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
@@ -111,15 +153,18 @@ function Shell() {
   }, [modal.open, graphKey, navOpen, closeModal, setGraphKey, setNavOpen]);
 
   return (
-    <div className="shell">
-      <Header />
-      <NavDrawer />
-      <main key={page} className="page-fade">
-        {page === "dashboard" && <Dashboard />}
-        {page === "weather" && <Weather />}
-        {page === "doctor" && <PlantDoctor />}
-        {page === "ai" && <AiAssistants />}
-      </main>
+    <div className="app">
+      <Boot />
+      <Sidebar />
+      <div className="main">
+        <Topbar />
+        <main key={page} className="page-fade">
+          {page === "dashboard" && <Dashboard />}
+          {page === "weather" && <Weather />}
+          {page === "doctor" && <PlantDoctor />}
+          {page === "ai" && <AiAssistants />}
+        </main>
+      </div>
       <HoverGraph />
       <GraphModal />
       <AnalysisModal />

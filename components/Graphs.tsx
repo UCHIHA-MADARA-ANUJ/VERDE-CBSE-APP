@@ -3,7 +3,7 @@
 import { HOVER_LEN, SENSOR_META } from "@/lib/config";
 import { trend } from "@/lib/logic";
 import { useVerde } from "./VerdeProvider";
-import { LineChart } from "./ui";
+import { Icon, LineChart } from "./ui";
 
 const HG_W = 280;
 
@@ -53,7 +53,7 @@ export function GraphModal() {
       <div className="sheet graph-sheet" onClick={(e) => e.stopPropagation()}>
         <div className="sheet-h">
           <h3>{meta.label} · last {HOVER_LEN} readings</h3>
-          <button className="icon-btn" onClick={() => setGraphKey(null)} aria-label="Close">✕</button>
+          <button className="icon-btn" onClick={() => setGraphKey(null)} aria-label="Close"><Icon name="close" size={16} /></button>
         </div>
         {series.length ? (
           <LineChart values={series} color={meta.color} height={200} />

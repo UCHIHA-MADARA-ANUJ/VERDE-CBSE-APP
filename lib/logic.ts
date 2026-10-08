@@ -145,3 +145,73 @@ export function transcript(lines: ChatLine[], n = 8): string {
     .map((l) => `${l.role === "user" ? "User" : "VERDE AI"}: ${l.text.slice(0, 400)}`)
     .join("\n");
 }
+
+// ---------- status badges for telemetry cards ----------
+export type Tone = "ok" | "warn" | "bad" | "info" | "idle";
+export type Status = { label: string; tone: Tone };
+
+export function moistureStatus(m: number | undefined, threshold: number): Status {
+  if (m === undefined) return { label: "No data", tone: "idle" };
+  if (m < threshold) return { label: "Dry — watering", tone: "bad" };
+  if (m > 85) return { label: "Saturated", tone: "info" };
+  return { label: "Optimal", tone: "ok" };
+}
+
+export function tempStatus(t: number | undefined): Status {
+  if (t === undefined) return { label: "No data", tone: "idle" };
+  if (t < 18) return { label: "Cold", tone: "info" };
+  if (t > 32) return { label: "Hot", tone: "bad" };
+  return { label: "Optimal", tone: "ok" };
+}
+
+export function humidityStatus(h: number | undefined): Status {
+  if (h === undefined) return { label: "No data", tone: "idle" };
+  if (h < 40) return { label: "Dry air", tone: "warn" };
+  if (h > 75) return { label: "Humid", tone: "info" };
+  return { label: "Optimal", tone: "ok" };
+}
+
+export function tankStatus(pct: number | null, lock: number): Status {
+  if (pct === null) return { label: "No data", tone: "idle" };
+  if (lock > 0 && pct < lock) return { label: "Low — pump locked", tone: "bad" };
+  if (pct < 30) return { label: "Getting low", tone: "warn" };
+  return { label: "Healthy", tone: "ok" };
+}
+
+export function luxStatus(luxPct: number, lightTh: number, hasData: boolean): Status {
+  if (!hasData) return { label: "No data", tone: "idle" };
+  return luxPct < lightTh ? { label: "Dark — LED on", tone: "warn" } : { label: "Bright", tone: "ok" };
+}
+
+/**
+ * Derived "vitality" score (0–100) from live readings vs. your thresholds.
+ * Each problem subtracts points; returns null with no data yet.
+ */
+export function vitality(
+  s: Sensors,
+  c: Controls,
+  tankPct: number | null,
+): { score: number; issues: string[] } | null {
+  if (s.moisture === undefined && s.temperature === undefined && s.humidity === undefined) return null;
+  let score = 100;
+  const issues: string[] = [];
+  const moistTh = c.moisture_threshold ?? 35;
+  const tankTh = c.tank_threshold ?? 15;
+  if (s.moisture !== undefined) {
+    if (s.moisture < moistTh) { score -= 25; issues.push("soil is dry"); }
+    if (s.moisture > 85) { score -= 10; issues.push("soil is waterlogged"); }
+  }
+  if (s.temperature !== undefined && (s.temperature < 18 || s.temperature > 32)) {
+    score -= 15;
+    issues.push("temperature out of range");
+  }
+  if (s.humidity !== undefined && (s.humidity < 40 || s.humidity > 75)) {
+    score -= 10;
+    issues.push("humidity out of range");
+  }
+  if (tankPct !== null && tankTh > 0 && tankPct < tankTh) {
+    score -= 20;
+    issues.push("tank below lock level");
+  }
+  return { score: Math.max(0, Math.min(100, score)), issues };
+}
