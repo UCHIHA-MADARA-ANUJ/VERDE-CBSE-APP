@@ -34,7 +34,7 @@ export function Uptime({ startedAt }: { startedAt: number }) {
 const toneColor = (t: Status["tone"]) =>
   ({ ok: "var(--green)", warn: "var(--amber)", bad: "var(--red)", info: "var(--sky)", idle: "var(--dim)" })[t];
 
-/** Telemetry card: title + source, big reading, status, sparkline. Click → expanded graph. */
+/** Telemetry card: fixed structure so every card lines up. Click → expanded history. */
 function SensorCard({
   id,
   icon,
@@ -57,6 +57,7 @@ function SensorCard({
   const { setGraphKey, setHover } = useVerde();
   const t = series ? trend(series.slice(-HOVER_LEN)) : null;
   const color = id ? SENSOR_META[id].color : "var(--green)";
+  const hasSeries = !!series && series.length > 1;
   return (
     <article
       className={`sensor ${id ? "clickable" : ""}`}
@@ -80,42 +81,71 @@ function SensorCard({
         </div>
         <StatusPill status={status} />
       </header>
+
       <div className="sensor-body">{children}</div>
-      {series && (
-        <div className="sensor-spark">
-          <LineChart values={series.slice(-HOVER_LEN)} color={color} height={44} grid={false} />
-          {t && <div className={`delta ${t.dir}`}>{t.text} <span className="muted">· last {HOVER_LEN}</span></div>}
-        </div>
-      )}
+
+      <div className="sensor-spark">
+        {hasSeries ? (
+          <>
+            <LineChart values={series!.slice(-HOVER_LEN)} color={color} height={52} grid={false} />
+            <div className="spark-foot">
+              <span className={`delta ${t?.dir ?? "flat"}`}>{t?.text}</span>
+              <span className="muted mono">last {Math.min(series!.length, HOVER_LEN)}</span>
+            </div>
+          </>
+        ) : (
+          <div className="spark-empty mono">collecting history…</div>
+        )}
+      </div>
+
       {footer && <div className="sensor-foot" onClick={(e) => e.stopPropagation()}>{footer}</div>}
     </article>
   );
 }
 
+function MiniStat({ label, value, unit }: { label: string; value: number | string | null | undefined; unit: string }) {
+  const shown = value === null || value === undefined ? "—" : value;
+  return (
+    <div className="mini">
+      <span>{label}</span>
+      <b className="mono">{shown}{value !== null && value !== undefined && <small>{unit}</small>}</b>
+    </div>
+  );
+}
+
 function Vitality() {
-  const { sensors, controls, tankPct, pollState } = useVerde();
-  const v = vitality(sensors, controls, tankPct);
+  const { sensors: s, controls, tankPct, pollState } = useVerde();
+  const v = vitality(s, controls, tankPct);
   const score = v?.score ?? null;
   const color = score === null ? "var(--dim)" : score >= 80 ? "var(--green)" : score >= 50 ? "var(--amber)" : "var(--red)";
+  const liveTone = pollState === "live" ? "ok" : pollState === "offline" ? "bad" : "warn";
   return (
-    <Card className="hero" title="Sensory telemetry overview" icon="pulse" right={<Badge tone={pollState === "live" ? "ok" : pollState === "offline" ? "bad" : "warn"}>{pollState === "live" ? "live" : pollState}</Badge>}>
+    <Card className="hero" title="Sensory telemetry overview" icon="pulse" right={<Badge tone={liveTone}>{pollState === "live" ? "live" : pollState}</Badge>}>
       <div className="hero-body">
-        <Gauge value={score ?? 0} color={color} size={156} stroke={12}>
-          <div className="vit-score mono" style={{ color }}>{score === null ? "--" : `${score}%`}</div>
+        <Gauge value={score ?? 0} color={color} size={164} stroke={12}>
+          <div className="vit-score mono" style={{ color }}>{score === null ? "—" : score}<small>{score === null ? "" : "/100"}</small></div>
           <div className="vit-label">Vitality</div>
         </Gauge>
         <div className="hero-info">
-          <p className="lede">Live readings from your WROOM-32 platform, scored against your thresholds.</p>
-          {v === null ? (
-            <p className="muted">Waiting for sensor data…</p>
-          ) : v.issues.length === 0 ? (
+          <p className="lede">
+            {score === null
+              ? pollState === "offline" ? "The device is not reachable right now." : "Waiting for the first readings from your WROOM-32…"
+              : "Live readings from your WROOM-32 platform, scored against your thresholds."}
+          </p>
+          {v && (v.issues.length === 0 ? (
             <p className="ok-line"><Icon name="shield" size={16} /> All readings are within range.</p>
           ) : (
             <ul className="issues">
               {v.issues.map((i) => <li key={i}>{i}</li>)}
             </ul>
-          )}
-          <p className="fine muted">Vitality is derived by this app from thresholds, not measured by the device.</p>
+          ))}
+          <div className="mini-grid">
+            <MiniStat label="Soil" value={s.moisture} unit="%" />
+            <MiniStat label="Air" value={s.temperature} unit="°C" />
+            <MiniStat label="Light" value={s.lux} unit=" lx" />
+            <MiniStat label="Tank" value={tankPct === null ? null : Math.round(tankPct)} unit="%" />
+          </div>
+          <p className="fine muted">Vitality is calculated by this app from your thresholds — the device does not measure it.</p>
         </div>
       </div>
     </Card>
@@ -123,20 +153,21 @@ function Vitality() {
 }
 
 function Actuators() {
-  const { prediction, controls, rain } = useVerde();
+  const { prediction, controls, rain, sensors } = useVerde();
   const p = prediction;
+  const known = sensors.moisture !== undefined || sensors.lux !== undefined;
   return (
-    <Card title="Actuator states" icon="bolt" right={<span className="chip">predicted</span>}>
+    <Card title="Actuator states" icon="bolt" right={<span className="chip">{known ? "predicted" : "waiting"}</span>}>
       <div className="actuators">
-        <div className={`act ${p.pump ? "on" : ""}`} style={{ ["--act" as string]: "var(--sky)" }}>
+        <div className={`act ${known && p.pump ? "on" : ""}`} style={{ ["--act" as string]: "var(--sky)" }}>
           <Icon name="drop" size={22} />
           <div className="act-k">Pump</div>
-          <div className="act-v">{p.pump ? "ON" : "OFF"}</div>
+          <div className="act-v">{known ? (p.pump ? "ON" : "OFF") : "—"}</div>
         </div>
-        <div className={`act ${p.light ? "on" : ""}`} style={{ ["--act" as string]: "var(--violet)" }}>
+        <div className={`act ${known && p.light ? "on" : ""}`} style={{ ["--act" as string]: "var(--violet)" }}>
           <Icon name="sun" size={22} />
           <div className="act-k">Grow light</div>
-          <div className="act-v">{p.light ? "ON" : "OFF"}</div>
+          <div className="act-v">{known ? (p.light ? "ON" : "OFF") : "—"}</div>
         </div>
       </div>
       <div className="kv">
@@ -144,7 +175,7 @@ function Actuators() {
         <div><span>Light mode</span><b>{controls.light_manual_mode ? "Manual" : "Auto"}</b></div>
         <div><span>Rain override</span><b className={rain ? "err" : ""}>{rain ? "Active" : "Off"}</b></div>
       </div>
-      <div className="reason mono">{p.reason}</div>
+      <div className="reason mono">{known ? p.reason : "Predictions appear once the device reports readings."}</div>
     </Card>
   );
 }
@@ -154,71 +185,57 @@ function Sensors() {
   const moistTh = controls.moisture_threshold ?? 35;
   const tankTh = controls.tank_threshold ?? 15;
   const lightTh = controls.light_threshold ?? 35;
+  const hasLux = s.lux !== undefined;
   const luxPct = Math.min(100, (s.lux ?? 0) / 10);
+  const moist = moistureStatus(s.moisture, moistTh);
+  const tank = tankStatus(tankPct, tankTh);
   return (
     <div className="sensor-grid">
-      <SensorCard
-        id="moisture"
-        icon="drop"
-        title="Soil moisture"
-        source="GPIO 34 · continuous read"
-        status={moistureStatus(s.moisture, moistTh)}
-        series={history.moisture}
-      >
+      <SensorCard id="moisture" icon="drop" title="Soil moisture" source="GPIO 34 · continuous" status={moist} series={history.moisture}>
         <div className="reading-row">
-          <Gauge value={s.moisture ?? 0} color={toneColor(moistureStatus(s.moisture, moistTh).tone)} size={96} stroke={9}>
-            <span className="gauge-v mono">{s.moisture ?? "--"}<small>%</small></span>
+          <Gauge value={s.moisture ?? 0} color={toneColor(moist.tone)} size={104} stroke={9}>
+            <span className="gauge-v mono">{s.moisture ?? "—"}{s.moisture !== undefined && <small>%</small>}</span>
           </Gauge>
           <div className="reading-side">
-            <div className="muted small">Threshold</div>
-            <div className="mono">{moistTh}%</div>
+            <span className="muted small">Water below</span>
+            <b className="mono">{moistTh}%</b>
           </div>
         </div>
       </SensorCard>
 
-      <SensorCard
-        id="temperature"
-        icon="thermo"
-        title="Atmosphere"
-        source="GPIO 4 · DHT11 core"
-        status={tempStatus(s.temperature)}
-        series={history.temperature}
-      >
+      <SensorCard id="temperature" icon="thermo" title="Atmosphere" source="GPIO 4 · DHT11" status={tempStatus(s.temperature)} series={history.temperature}>
         <div className="dual">
           <div>
-            <div className="big mono">{s.temperature ?? "--"}<small>°C</small></div>
+            <div className="big mono">{s.temperature ?? "—"}{s.temperature !== undefined && <small>°C</small>}</div>
             <div className="muted small">temperature</div>
           </div>
           <div>
-            <div className="big mono">{s.humidity ?? "--"}<small>%</small></div>
+            <div className="big mono">{s.humidity ?? "—"}{s.humidity !== undefined && <small>%</small>}</div>
             <div className="muted small">humidity</div>
           </div>
         </div>
-        <div className="meter-row">
-          <Meter value={s.humidity ?? 0} color="var(--sky)" />
-        </div>
-        <div className="muted small">Humidity <StatusPill status={humidityStatus(s.humidity)} /></div>
+        <Meter value={s.humidity ?? 0} color="var(--sky)" />
+        <div className="inline-status muted small">humidity <StatusPill status={humidityStatus(s.humidity)} /></div>
       </SensorCard>
 
-      <SensorCard
-        id="lux"
-        icon="sun"
-        title="Lux intensity"
-        source="GPIO 35 · analog LDR"
-        status={luxStatus(luxPct, lightTh, s.lux !== undefined)}
-        series={history.lux}
-      >
-        <div className="big mono">{s.lux ?? "--"}<small>lx</small></div>
-        <div className="meter-row"><Meter value={luxPct} color="var(--violet)" /></div>
-        <div className="muted small">{Math.round(luxPct)}% of scale · dark below {lightTh}%</div>
+      <SensorCard id="lux" icon="sun" title="Lux intensity" source="GPIO 35 · LDR" status={luxStatus(luxPct, lightTh, hasLux)} series={history.lux}>
+        <div className="big mono">{hasLux ? s.lux : "—"}{hasLux && <small>lx</small>}</div>
+        {hasLux ? (
+          <>
+            <Meter value={luxPct} color="var(--violet)" />
+            <div className="muted small">{Math.round(luxPct)}% of scale · dark below {lightTh}%</div>
+          </>
+        ) : (
+          <div className="muted small">no light reading yet</div>
+        )}
       </SensorCard>
 
       <SensorCard
         id="tank_level"
         icon="tank"
         title="Reservoir tank"
-        source="calibrated in app · no reflash"
-        status={tankStatus(tankPct, tankTh)}
+        source="calibrated in app"
+        status={tank}
         series={history.tank_level}
         footer={
           <div className="cal-row">
@@ -229,14 +246,13 @@ function Sensors() {
         }
       >
         <div className="reading-row">
-          <Gauge value={tankPct ?? 0} color={toneColor(tankStatus(tankPct, tankTh).tone)} size={96} stroke={9}>
-            <span className="gauge-v mono">{tankPct === null ? "--" : Math.round(tankPct)}<small>%</small></span>
+          <Gauge value={tankPct ?? 0} color={toneColor(tank.tone)} size={104} stroke={9}>
+            <span className="gauge-v mono">{tankPct === null ? "—" : Math.round(tankPct)}{tankPct !== null && <small>%</small>}</span>
           </Gauge>
           <div className="reading-side">
-            <div className="muted small">raw</div>
-            <div className="mono">{s.tank_level ?? "--"}%</div>
-            <div className="muted small">lock at</div>
-            <div className="mono">{tankTh}%</div>
+            <span className="muted small">raw {s.tank_level ?? "—"}%</span>
+            <span className="muted small">lock at</span>
+            <b className="mono">{tankTh}%</b>
           </div>
         </div>
       </SensorCard>
@@ -251,23 +267,16 @@ function Analytics() {
   const max = series.length ? Math.max(...series) : null;
   const avg = series.length ? series.reduce((a, b) => a + b, 0) / series.length : null;
   const t = trend(series);
-  const f = (n: number | null) => (n === null ? "--" : n.toFixed(1));
+  const f = (n: number | null) => (n === null ? "—" : n.toFixed(1));
   return (
     <Card className="analytics" title="Soil hydration analytics" icon="drop" right={<span className="chip">last {series.length} readings</span>}>
       <div className="stats-row">
-        <div className="stat"><span>Latest</span><b className="mono">{series.at(-1) ?? "--"}%</b></div>
-        <div className="stat"><span>Average</span><b className="mono">{f(avg)}%</b></div>
+        <div className="stat"><span>Latest</span><b className="mono">{series.at(-1) ?? "—"}{series.length ? "%" : ""}</b></div>
+        <div className="stat"><span>Average</span><b className="mono">{f(avg)}{avg !== null && "%"}</b></div>
         <div className="stat"><span>Min / Max</span><b className="mono">{f(min)} / {f(max)}</b></div>
         <div className="stat"><span>Trend</span><b className={`mono delta-b ${t.dir}`}>{t.text}</b></div>
       </div>
-      <LineChart
-        values={series}
-        color="#3ddc84"
-        height={210}
-        min={0}
-        max={100}
-        threshold={controls.moisture_threshold ?? 35}
-      />
+      <LineChart values={series} color="#3ddc84" height={220} min={0} max={100} threshold={controls.moisture_threshold ?? 35} />
       <div className="legend mono">
         <span><i className="lg-line" /> soil moisture</span>
         <span><i className="lg-dash" /> threshold {controls.moisture_threshold ?? 35}%</span>
@@ -276,30 +285,24 @@ function Analytics() {
   );
 }
 
+function ControlRow({ label, hint, checked, onChange }: { label: string; hint: string; checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <div className="toggles">
+      <div className="toggle-l"><b>{label}</b><small>{hint}</small></div>
+      <Toggle label={label} checked={checked} onChange={onChange} />
+    </div>
+  );
+}
+
 function Controls() {
   const { controls: c, setCtrl } = useVerde();
   return (
     <Card title="Controls" icon="gauge" right={<span className="chip">live</span>}>
-      <div className="toggles">
-        <Toggle label="Pump manual mode" checked={!!c.manual_mode} onChange={(v) => setCtrl("manual_mode", v)} />
-        <div className="toggle-l"><b>Pump manual mode</b><small>off = automatic</small></div>
-      </div>
-      <div className="toggles">
-        <Toggle label="Pump state" checked={!!c.pump_state} onChange={(v) => setCtrl("pump_state", v)} />
-        <div className="toggle-l"><b>Pump on</b><small>used in manual mode</small></div>
-      </div>
-      <div className="toggles">
-        <Toggle label="Light manual mode" checked={!!c.light_manual_mode} onChange={(v) => setCtrl("light_manual_mode", v)} />
-        <div className="toggle-l"><b>Light manual mode</b><small>off = automatic</small></div>
-      </div>
-      <div className="toggles">
-        <Toggle label="Grow light" checked={!!c.grow_light_state} onChange={(v) => setCtrl("grow_light_state", v)} />
-        <div className="toggle-l"><b>Grow light on</b><small>used in manual mode</small></div>
-      </div>
-      <div className="toggles">
-        <Toggle label="Rain override" checked={c.weather_override === 1} onChange={(v) => setCtrl("weather_override", v ? 1 : 0)} />
-        <div className="toggle-l"><b>☔ Rain override</b><small>blocks auto-watering</small></div>
-      </div>
+      <ControlRow label="Pump manual mode" hint="off = automatic" checked={!!c.manual_mode} onChange={(v) => setCtrl("manual_mode", v)} />
+      <ControlRow label="Pump on" hint="used in manual mode" checked={!!c.pump_state} onChange={(v) => setCtrl("pump_state", v)} />
+      <ControlRow label="Light manual mode" hint="off = automatic" checked={!!c.light_manual_mode} onChange={(v) => setCtrl("light_manual_mode", v)} />
+      <ControlRow label="Grow light on" hint="used in manual mode" checked={!!c.grow_light_state} onChange={(v) => setCtrl("grow_light_state", v)} />
+      <ControlRow label="☔ Rain override" hint="blocks auto-watering" checked={c.weather_override === 1} onChange={(v) => setCtrl("weather_override", v ? 1 : 0)} />
 
       <div className="divider" />
       <Threshold label="Moisture threshold" hint="water when soil is drier than this" value={c.moisture_threshold} fallback={35} min={0} max={80} step={5} tone="var(--green)" onCommit={(v) => setCtrl("moisture_threshold", v)} />
@@ -312,11 +315,11 @@ function Controls() {
 function DeviceHealth() {
   const { sensors: s, pollState, latestScan } = useVerde();
   const rows: [string, string][] = [
-    ["Supply voltage sag", s.voltage_sag !== undefined ? `${s.voltage_sag} V` : "--"],
+    ["Supply voltage sag", s.voltage_sag !== undefined ? `${s.voltage_sag} V` : "—"],
     ["Uploads ok / failed", `${s.successful_uploads ?? 0} / ${s.failed_uploads ?? 0}`],
-    ["Raw light", `${s.light ?? "--"}`],
-    ["Watchdog", s.watchdog_status ?? "--"],
-    ["Last CAM frame", latestScan.captured_at ? new Date(latestScan.captured_at).toLocaleTimeString("en-GB") : "--"],
+    ["Raw light", `${s.light ?? "—"}`],
+    ["Watchdog", s.watchdog_status ?? "—"],
+    ["Last CAM frame", latestScan.captured_at ? new Date(latestScan.captured_at).toLocaleTimeString("en-GB") : "—"],
     ["Link", pollState],
   ];
   return (

@@ -57,7 +57,7 @@ function Sidebar() {
           <div className="brand-mark"><Icon name="leaf" size={20} /></div>
           <div>
             <div className="brand-t">PROJECT VERDE</div>
-            <div className="brand-s">OS <span>V3.0</span> · Autonomous Plant</div>
+            <div className="brand-s">Autonomous Plant <span>· V3.0</span></div>
           </div>
         </div>
 
@@ -83,7 +83,7 @@ function Sidebar() {
 
         <div className="sidebar-foot">
           <LinkPill state={pollState} />
-          <div className="muted mono small">v{APP_VERSION}</div>
+          <div className="muted mono small">build {APP_VERSION.replace("FINAL-DEMO-", "")}</div>
         </div>
       </aside>
     </>

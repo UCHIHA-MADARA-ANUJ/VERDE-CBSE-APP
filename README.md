@@ -52,6 +52,21 @@ Required variables (see `.env.example`):
 
 Scripts: `npm run dev`, `npm run build`, `npm start`, `npm run lint`.
 
+## Pages
+
+- **Dashboard**: live vitality score, sensor tiles with sparklines, actuator states, soil history, tank calibration, controls and threshold sliders, terminal shell, device health and activity log.
+- **Weather**: Delhi live conditions, 5-day forecast, rain override status and manual weather check.
+- **Plant Doctor**: CAM feed, photo upload, Crop.health identification with treatment notes, and Gemini follow-up chat.
+- **AI assistants**: Gemini image chat and the OpenRouter sensor-aware assistant.
+
+## Known issues and decisions
+
+- **Weather interval**: the code uses 10 minutes (`WEATHER_INTERVAL_MS` in `lib/config.ts`). The original HTML had 3 minutes in code and 10 minutes in a comment. 10 minutes was kept.
+- **Weather override**: the auto-check writes `weather_override` on every run, so it can overwrite a manual rain toggle.
+- **Unused variables**: `CAM_UPLOAD_API` and `CAM_API_KEY` are not referenced in the visible source. If a truncated part of the original used them, add them to `.env.example` and the server routes.
+- **Rotate keys**: any API keys pasted into chat or shared elsewhere should be treated as exposed. Rotate them, then put the new values in `.env.local`.
+- **No device data**: without Firebase credentials, the dashboard shows "—" and "No data" for sensors. This is expected.
+
 ## Security notes
 
 - `.env*` files are git-ignored (only `.env.example` is committed).

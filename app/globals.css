@@ -511,3 +511,41 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.01em; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ===================== polish pass 2 ===================== */
+.sensor-grid { align-items: stretch; }
+.sensor { height: 100%; }
+.sensor-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px; min-height: 118px; }
+.sensor-spark { margin-top: auto; min-height: 66px; display: flex; flex-direction: column; justify-content: flex-end; }
+.sensor-spark .chart { height: 52px !important; }
+.spark-foot { display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 6px; }
+.spark-foot .muted { font-size: 11px; }
+.spark-empty { font-size: 11px; color: var(--dim); padding: 18px 0 4px; border-top: 1px dashed var(--line); text-align: center; }
+.inline-status { display: flex; align-items: center; gap: 8px; }
+.reading-side { gap: 4px; }
+.reading-side b { font-size: 18px; }
+.reading-side .small { font-size: 11px; }
+.sensor-foot { margin-top: 2px; }
+.cal-row .btn { flex: 1; justify-content: center; }
+
+.vit-score { font-size: 42px; font-weight: 800; line-height: 1; display: flex; align-items: baseline; gap: 3px; justify-content: center; }
+.vit-score small { font-size: 14px; color: var(--muted); font-weight: 600; }
+.mini-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; margin-top: 18px; }
+.mini { background: rgba(255,255,255,.03); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; }
+.mini span { font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.mini b { font-size: 17px; }
+.mini small { font-size: 11px; color: var(--muted); margin-left: 2px; font-weight: 600; }
+.hero { display: flex; flex-direction: column; }
+.hero-body { flex: 1; }
+.hero .hero-info { display: flex; flex-direction: column; justify-content: center; }
+.hero .lede { font-size: 16px; }
+.act { min-height: 128px; justify-content: center; }
+.act-v { font-size: 26px; }
+.act-v:empty::after { content: "—"; }
+
+.brand-s { white-space: nowrap; }
+.kv b.mono { font-size: 13px; }
+.sidebar-foot .mono { font-size: 11px; }
+
+/* toasts sit above cards and never cover the bottom action row for long */
+.toast { max-width: 360px; }
