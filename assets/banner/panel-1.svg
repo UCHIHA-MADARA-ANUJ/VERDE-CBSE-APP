@@ -32,23 +32,71 @@
 <text x="1240" y="3320" text-anchor="middle" font-family="IBM Plex Mono" font-weight="400" font-size="30" letter-spacing="6" fill="#3d5748">AUTONOMOUS · SEALED LOOP · ON-DEVICE AI · ZERO SOIL · AUTONOMOUS · SEALED LOOP</text>
 <text x="140" y="172" font-family="Oswald" font-weight="500" font-size="70" letter-spacing="16" fill="#F2F7F3">PROJECT VERDE</text>
 <text x="142" y="240" font-family="IBM Plex Mono" font-weight="400" font-size="30" letter-spacing="9" fill="#6b8577">AUTONOMOUS CULTIVATION SYSTEM</text>
-<g stroke="#00FF87" stroke-width="3" fill="none" opacity="0.20" stroke-linejoin="round" stroke-linecap="round">
-  <path d="M-10 880 H520 L660 1020 H1120 L1260 1160 H1760"/>
-  <path d="M-10 1180 H320 L460 1320 H920 L1060 1460 H1560"/>
-  <path d="M-10 1480 H720 L860 1620 H1320 L1460 1760 H1980"/>
-  <path d="M180 -10 V320 L320 460 V820"/>
+<!-- chip -->
+<rect x="960" y="460" width="560" height="360" rx="24" fill="#0a0f0d" stroke="#1d4a33" stroke-width="3"/>
+<rect x="1000" y="500" width="480" height="280" rx="14" fill="#0d1512" stroke="#14231b" stroke-width="2"/>
+<text x="1240" y="640" text-anchor="middle" font-family="Oswald" font-weight="500" font-size="66" letter-spacing="10" fill="#F2F7F3">ESP8266</text>
+<text x="1243" y="702" text-anchor="middle" font-family="IBM Plex Mono" font-weight="400" font-size="24" letter-spacing="4" fill="#6b8577">NODEMCU · CUSTOM PCB</text>
+<g stroke="#00FF87" stroke-width="5" opacity="0.45">
+  <line x1="896" y1="500" x2="960" y2="500"/><line x1="896" y1="560" x2="960" y2="560"/>
+  <line x1="896" y1="620" x2="960" y2="620"/><line x1="896" y1="680" x2="960" y2="680"/>
+  <line x1="896" y1="740" x2="960" y2="740"/><line x1="896" y1="800" x2="960" y2="800"/>
+  <line x1="1520" y1="500" x2="1584" y2="500"/><line x1="1520" y1="560" x2="1584" y2="560"/>
+  <line x1="1520" y1="620" x2="1584" y2="620"/><line x1="1520" y1="680" x2="1584" y2="680"/>
+  <line x1="1520" y1="740" x2="1584" y2="740"/><line x1="1520" y1="800" x2="1584" y2="800"/>
 </g>
-<path d="M-10 1780 H420 L560 1920 H1080" stroke="#2a4237" stroke-width="3" fill="none" opacity="0.35"/>
+<!-- traces -->
+<g stroke="#00FF87" stroke-width="3" fill="none" opacity="0.20" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M-10 560 H500 L640 620 H896"/>
+  <path d="M-10 800 H380 L520 740 H896"/>
+  <path d="M1584 560 H1900 L2040 700 H2490"/>
+  <path d="M1584 740 H1820 L1960 880 H2340"/>
+  <path d="M-10 1020 H600 L740 1160 H1300 L1440 1300 H1900"/>
+  <path d="M-10 1320 H480 L620 1460 H1080 L1220 1600 H1700"/>
+  <path d="M-10 1620 H760 L900 1760 H1360 L1500 1900 H2000"/>
+  <path d="M1100 -10 V460"/>
+</g>
+<path d="M-10 1920 H680 L820 2060 H1340" stroke="#2a4237" stroke-width="3" fill="none" opacity="0.35"/>
 <g fill="#00FF87" opacity="0.5">
-  <circle cx="520" cy="880" r="8"/><circle cx="1120" cy="1020" r="8"/>
-  <circle cx="320" cy="1180" r="8"/><circle cx="920" cy="1320" r="8"/>
-  <circle cx="720" cy="1480" r="8"/><circle cx="1320" cy="1620" r="8"/>
-  <circle cx="320" cy="460" r="8"/>
+  <circle cx="640" cy="620" r="8"/><circle cx="520" cy="740" r="8"/>
+  <circle cx="2040" cy="700" r="8"/><circle cx="1960" cy="880" r="8"/>
+  <circle cx="740" cy="1160" r="8"/><circle cx="1440" cy="1300" r="8"/>
+  <circle cx="620" cy="1460" r="8"/><circle cx="1220" cy="1600" r="8"/>
+  <circle cx="900" cy="1760" r="8"/><circle cx="1500" cy="1900" r="8"/>
+  <circle cx="1100" cy="240" r="8"/>
 </g>
 <g fill="none" stroke="#00FF87" opacity="0.35">
-  <rect x="1746" y="1146" width="28" height="28"/><rect x="1546" y="1446" width="28" height="28"/>
-  <rect x="1966" y="1746" width="28" height="28"/><rect x="306" y="806" width="28" height="28"/>
+  <rect x="1886" y="1286" width="28" height="28"/><rect x="1686" y="1586" width="28" height="28"/>
+  <rect x="1986" y="1886" width="28" height="28"/><rect x="2326" y="866" width="28" height="28"/>
 </g>
+<!-- the loop -->
+<text x="140" y="1180" font-family="IBM Plex Mono" font-weight="500" font-size="28" letter-spacing="6" fill="#6b8577">THE LOOP — SIX STEPS, FOREVER</text>
+
+<text x="140" y="1330" font-family="Oswald" font-weight="500" font-size="56" fill="#00FF87">01</text>
+<text x="290" y="1330" font-family="Oswald" font-weight="500" font-size="46" letter-spacing="6" fill="#F2F7F3">SENSE</text>
+<text x="292" y="1376" font-family="IBM Plex Mono" font-weight="400" font-size="27" letter-spacing="1" fill="#6b8577">12 channels · bed, air &amp; reservoir @ 0.5 Hz</text>
+<line x1="140" y1="1406" x2="2340" y2="1406" stroke="#14231b" stroke-width="2"/>
+<text x="140" y="1520" font-family="Oswald" font-weight="500" font-size="56" fill="#00FF87">02</text>
+<text x="290" y="1520" font-family="Oswald" font-weight="500" font-size="46" letter-spacing="6" fill="#F2F7F3">SEE</text>
+<text x="292" y="1566" font-family="IBM Plex Mono" font-weight="400" font-size="27" letter-spacing="1" fill="#6b8577">OV2640 + TFLite INT8 · leaf health in 38 ms</text>
+<line x1="140" y1="1596" x2="2340" y2="1596" stroke="#14231b" stroke-width="2"/>
+<text x="140" y="1710" font-family="Oswald" font-weight="500" font-size="56" fill="#00FF87">03</text>
+<text x="290" y="1710" font-family="Oswald" font-weight="500" font-size="46" letter-spacing="6" fill="#F2F7F3">DECIDE</text>
+<text x="292" y="1756" font-family="IBM Plex Mono" font-weight="400" font-size="27" letter-spacing="1" fill="#6b8577">41 rules · weather-aware · 0 ms cloud</text>
+<line x1="140" y1="1786" x2="2340" y2="1786" stroke="#14231b" stroke-width="2"/>
+<text x="140" y="1900" font-family="Oswald" font-weight="500" font-size="56" fill="#00FF87">04</text>
+<text x="290" y="1900" font-family="Oswald" font-weight="500" font-size="46" letter-spacing="6" fill="#F2F7F3">ACT</text>
+<text x="292" y="1946" font-family="IBM Plex Mono" font-weight="400" font-size="27" letter-spacing="1" fill="#6b8577">pump 2.4 L/min · 12-ch LED PWM</text>
+<line x1="140" y1="1976" x2="2340" y2="1976" stroke="#14231b" stroke-width="2"/>
+<text x="140" y="2090" font-family="Oswald" font-weight="500" font-size="56" fill="#00FF87">05</text>
+<text x="290" y="2090" font-family="Oswald" font-weight="500" font-size="46" letter-spacing="6" fill="#F2F7F3">REPORT</text>
+<text x="292" y="2136" font-family="IBM Plex Mono" font-weight="400" font-size="27" letter-spacing="1" fill="#6b8577">Firebase RTDB · WhatsApp alerts EN / HI</text>
+<line x1="140" y1="2166" x2="2340" y2="2166" stroke="#14231b" stroke-width="2"/>
+<text x="140" y="2280" font-family="Oswald" font-weight="500" font-size="56" fill="#00FF87">06</text>
+<text x="290" y="2280" font-family="Oswald" font-weight="500" font-size="46" letter-spacing="6" fill="#F2F7F3">RECLAIM</text>
+<text x="292" y="2326" font-family="IBM Plex Mono" font-weight="400" font-size="27" letter-spacing="1" fill="#6b8577">sealed loop · 95% of water reclaimed</text>
+<line x1="140" y1="2356" x2="2340" y2="2356" stroke="#14231b" stroke-width="2"/>
+<!-- proof stats -->
 <g>
   <rect x="140" y="2488" width="36" height="5" fill="#00FF87" opacity="0.9"/>
   <text x="204" y="2520" font-family="IBM Plex Mono" font-weight="500" font-size="38" letter-spacing="4" fill="#d7e8dc">20 GROWING SITES</text>

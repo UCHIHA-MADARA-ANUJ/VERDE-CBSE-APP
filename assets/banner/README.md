@@ -1,4 +1,4 @@
-# 🪧 VERDE Exhibition Banner — 3 × A4 Triptych
+# 🪧 VERDE Exhibition Banner — 3 × A4 Triptych (v2)
 
 Print-ready booth banner: **three A4 portrait sheets** that line up side-by-side
 into one wide banner (same format as the illuminated triptych on the project table).
@@ -28,16 +28,31 @@ into one wide banner (same format as the illuminated triptych on the project tab
    (each PNG is exactly 2480 × 3508 px = 210 × 297 mm at 300 dpi).
 3. Line the sheets up on the lightbox in this order:
    **panel 1 (left) → panel 2 (center) → panel 3 (right)**.
-4. The center sheet carries the brand: tilted sprout logo + **VERDE** + *an ecosystem*.
+
+## 🧩 What's on each sheet
+
+- **Panel 1 — the system:** PROJECT VERDE title → ESP8266 chip graphic with
+  PCB traces flowing in/out → **THE LOOP** (Sense → See → Decide → Act → Report
+  → Reclaim, one line each) → proof stats (20 sites · 04 tiers · 95% less water).
+- **Panel 2 — the brand (center):** HUD corners + "AUTONOMOUS AGRICULTURE — V3.0"
+  eyebrow → **tilted sprout logo** in a dashed HUD ring with green arcs →
+  **VERDE** wordmark → green tick → **AN ECOSYSTEM** → live telemetry tiles
+  (moisture 68% · temp 24.1 °C · pH 6.21 · tank 82%) → pillars line
+  (waters itself · watches the plants · tells you).
+- **Panel 3 — the proof:** EST. 2025 Delhi header → **DIRT LOSES** comparison
+  bars (soil vs Verde: water/cycle, floor area, harvest time, interventions)
+  → hardware spec grid (160 MHz · 38 ms AI · 12 ch · 1,200+ lines C++)
+  → sensing stack → website URL.
 
 ## 🎨 Design
 
 - **Palette:** near-black `#050708`, acid green `#00FF87`, white `#F2F7F3` —
   the same language as [verde-cbse.vercel.app](https://verde-cbse.vercel.app).
-- **Type:** Oswald (display wordmark) + IBM Plex Mono (micro labels / HUD text).
+- **Type:** Oswald (display wordmark / big numbers) + IBM Plex Mono (micro labels / HUD text).
 - **Art direction:** HUD frame with corner ticks, fine grid + scanlines, vignette,
   PCB-style circuit traces with nodes/pads, dashed HUD ring around the logo,
-  and a keyword strip that reads continuously across all three sheets.
+  card-style data tiles, and a keyword strip that reads continuously across
+  all three sheets.
 - Logo: the VERDE sprout mark (`assets/logo.svg`), tilted −8°, with a soft
   acid-green glow.
 

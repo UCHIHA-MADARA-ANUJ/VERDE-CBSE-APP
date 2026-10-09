@@ -32,6 +32,7 @@
 <text x="1240" y="3320" text-anchor="middle" font-family="IBM Plex Mono" font-weight="400" font-size="30" letter-spacing="6" fill="#3d5748">AUTONOMOUS · SEALED LOOP · ON-DEVICE AI · ZERO SOIL · AUTONOMOUS · SEALED LOOP</text>
 <text x="140" y="170" font-family="IBM Plex Mono" font-weight="500" font-size="30" letter-spacing="6" fill="#5f7a6a">VERDE OS — V3.0.0</text>
 <text x="2340" y="170" text-anchor="end" font-family="IBM Plex Mono" font-weight="500" font-size="30" letter-spacing="6" fill="#5f7a6a">TOWER_01 · DELHI · IN</text>
+<text x="1240" y="316" text-anchor="middle" font-family="IBM Plex Mono" font-weight="400" font-size="28" letter-spacing="10" fill="#4b6355">AUTONOMOUS AGRICULTURE — V3.0</text>
 <circle cx="1240" cy="1420" r="500" fill="none" stroke="#1d4a33" stroke-width="2.5" stroke-dasharray="4 16" opacity="0.9"/>
 <circle cx="1240" cy="1420" r="500" fill="none" stroke="#00FF87" stroke-width="5" stroke-linecap="round" stroke-dasharray="250 2892" opacity="0.9" transform="rotate(-50 1240 1420)"/>
 <circle cx="1240" cy="1420" r="500" fill="none" stroke="#00FF87" stroke-width="4" stroke-linecap="round" stroke-dasharray="110 3032" opacity="0.6" transform="rotate(150 1240 1420)"/>
@@ -40,4 +41,22 @@
 <text x="1240" y="2520" text-anchor="middle" font-family="Oswald" font-weight="600" font-size="520" letter-spacing="12" fill="#F2F7F3">VERDE</text>
 <rect x="1198" y="2612" width="84" height="6" fill="#00FF87"/>
 <text x="1255" y="2760" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="56" letter-spacing="30" fill="#86efac" opacity="0.85">AN ECOSYSTEM</text>
+
+<rect x="140" y="2920" width="520" height="190" rx="14" fill="#0a0f0d" stroke="#16241c" stroke-width="2"/>
+<circle cx="162" cy="2964" r="5" fill="#00FF87"/>
+<text x="182" y="2972" font-family="IBM Plex Mono" font-weight="500" font-size="24" letter-spacing="3" fill="#6b8577">MOISTURE</text>
+<text x="180" y="3058" font-family="Oswald" font-weight="600" font-size="62" fill="#F2F7F3">68%</text>
+<rect x="700" y="2920" width="520" height="190" rx="14" fill="#0a0f0d" stroke="#16241c" stroke-width="2"/>
+<circle cx="722" cy="2964" r="5" fill="#00FF87"/>
+<text x="742" y="2972" font-family="IBM Plex Mono" font-weight="500" font-size="24" letter-spacing="3" fill="#6b8577">TEMP</text>
+<text x="740" y="3058" font-family="Oswald" font-weight="600" font-size="62" fill="#F2F7F3">24.1°C</text>
+<rect x="1260" y="2920" width="520" height="190" rx="14" fill="#0a0f0d" stroke="#16241c" stroke-width="2"/>
+<circle cx="1282" cy="2964" r="5" fill="#00FF87"/>
+<text x="1302" y="2972" font-family="IBM Plex Mono" font-weight="500" font-size="24" letter-spacing="3" fill="#6b8577">NUTRIENT pH</text>
+<text x="1300" y="3058" font-family="Oswald" font-weight="600" font-size="62" fill="#F2F7F3">6.21</text>
+<rect x="1820" y="2920" width="520" height="190" rx="14" fill="#0a0f0d" stroke="#16241c" stroke-width="2"/>
+<circle cx="1842" cy="2964" r="5" fill="#00FF87"/>
+<text x="1862" y="2972" font-family="IBM Plex Mono" font-weight="500" font-size="24" letter-spacing="3" fill="#6b8577">TANK</text>
+<text x="1860" y="3058" font-family="Oswald" font-weight="600" font-size="62" fill="#F2F7F3">82%</text>
+<text x="1240" y="3230" text-anchor="middle" font-family="IBM Plex Mono" font-weight="400" font-size="28" letter-spacing="4" fill="#4b6355">01 WATERS ITSELF · 02 WATCHES THE PLANTS · 03 TELLS YOU</text>
 </svg>
