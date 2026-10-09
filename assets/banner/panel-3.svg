@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2480" height="3508" viewBox="0 0 2480 3508">
+
+<defs>
+  <pattern id="grid" width="310" height="310" patternUnits="userSpaceOnUse">
+    <path d="M310 0H0V310" fill="none" stroke="#0e1a14" stroke-width="1.5"/>
+  </pattern>
+  <pattern id="scan" width="8" height="8" patternUnits="userSpaceOnUse">
+    <rect width="8" height="1.4" fill="#ffffff" opacity="0.022"/>
+  </pattern>
+  <radialGradient id="vig" cx="0.5" cy="0.42" r="0.78">
+    <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="0.62" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1" stop-color="#000000" stop-opacity="0.55"/>
+  </radialGradient>
+  <radialGradient id="glowC" cx="0.5" cy="0.40" r="0.58">
+    <stop offset="0" stop-color="#00FF87" stop-opacity="0.17"/>
+    <stop offset="1" stop-color="#00FF87" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="blurL" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="42"/></filter>
+</defs>
+
+<rect width="2480" height="3508" fill="#050708"/>
+
+<rect width="2480" height="3508" fill="url(#grid)" opacity="0.55"/>
+<rect width="2480" height="3508" fill="url(#scan)"/>
+<rect width="2480" height="3508" fill="url(#vig)"/>
+<rect x="80" y="80" width="2320" height="3348" fill="none" stroke="#16241c" stroke-width="2"/>
+<g stroke="#00FF87" stroke-width="5" opacity="0.9" fill="none">
+  <path d="M80 152V80h72"/><path d="M2328 80h72v72"/>
+  <path d="M2400 3356v72h-72"/><path d="M152 3428H80v-72"/>
+</g>
+<text x="1240" y="3320" text-anchor="middle" font-family="IBM Plex Mono" font-weight="400" font-size="30" letter-spacing="6" fill="#3d5748">AUTONOMOUS · SEALED LOOP · ON-DEVICE AI · ZERO SOIL · AUTONOMOUS · SEALED LOOP</text>
+<text x="2340" y="170" text-anchor="end" font-family="IBM Plex Mono" font-weight="500" font-size="30" letter-spacing="6" fill="#6b8577">EST. 2025 — DELHI, IN</text>
+<text x="2340" y="238" text-anchor="end" font-family="IBM Plex Mono" font-weight="400" font-size="26" letter-spacing="7" fill="#4b6355">CBSE IOT &amp; TECH EXHIBITION</text>
+<g stroke="#00FF87" stroke-width="3" fill="none" opacity="0.20" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M720 1160 H1180 L1320 1020 H1780 L1920 880 H2490"/>
+  <path d="M920 1460 H1380 L1520 1320 H1980 L2120 1180 H2490"/>
+  <path d="M1020 1760 H1480 L1620 1620 H2080"/>
+  <path d="M2160 -10 V360 L2020 500 V860"/>
+</g>
+<path d="M1400 1920 H1860 L2000 1780 H2490" stroke="#2a4237" stroke-width="3" fill="none" opacity="0.35"/>
+<g fill="#00FF87" opacity="0.5">
+  <circle cx="1180" cy="1160" r="8"/><circle cx="1780" cy="1020" r="8"/>
+  <circle cx="1380" cy="1460" r="8"/><circle cx="1980" cy="1320" r="8"/>
+  <circle cx="1480" cy="1620" r="8"/><circle cx="2020" cy="500" r="8"/>
+</g>
+<g fill="none" stroke="#00FF87" opacity="0.35">
+  <rect x="1906" y="866" width="28" height="28"/><rect x="2106" y="1166" width="28" height="28"/>
+  <rect x="2066" y="1746" width="28" height="28"/><rect x="2006" y="846" width="28" height="28"/>
+</g>
+<g>
+  <rect x="2306" y="2488" width="36" height="5" fill="#00FF87" opacity="0.9"/>
+  <text x="2276" y="2520" text-anchor="end" font-family="IBM Plex Mono" font-weight="500" font-size="38" letter-spacing="4" fill="#d7e8dc">ESP8266 · CUSTOM PCB</text>
+  <rect x="2306" y="2618" width="36" height="5" fill="#00FF87" opacity="0.9"/>
+  <text x="2276" y="2650" text-anchor="end" font-family="IBM Plex Mono" font-weight="500" font-size="38" letter-spacing="4" fill="#d7e8dc">TFLITE ON-DEVICE AI</text>
+  <rect x="2306" y="2748" width="36" height="5" fill="#00FF87" opacity="0.9"/>
+  <text x="2276" y="2780" text-anchor="end" font-family="IBM Plex Mono" font-weight="500" font-size="38" letter-spacing="4" fill="#d7e8dc">FIREBASE · WHATSAPP</text>
+</g>
+<text x="2340" y="3240" text-anchor="end" font-family="IBM Plex Mono" font-weight="400" font-size="32" letter-spacing="4" fill="#5f7a6a">verde-cbse.vercel.app</text>
+</svg>

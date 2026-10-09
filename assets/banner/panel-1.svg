@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2480" height="3508" viewBox="0 0 2480 3508">
+
+<defs>
+  <pattern id="grid" width="310" height="310" patternUnits="userSpaceOnUse">
+    <path d="M310 0H0V310" fill="none" stroke="#0e1a14" stroke-width="1.5"/>
+  </pattern>
+  <pattern id="scan" width="8" height="8" patternUnits="userSpaceOnUse">
+    <rect width="8" height="1.4" fill="#ffffff" opacity="0.022"/>
+  </pattern>
+  <radialGradient id="vig" cx="0.5" cy="0.42" r="0.78">
+    <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="0.62" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1" stop-color="#000000" stop-opacity="0.55"/>
+  </radialGradient>
+  <radialGradient id="glowC" cx="0.5" cy="0.40" r="0.58">
+    <stop offset="0" stop-color="#00FF87" stop-opacity="0.17"/>
+    <stop offset="1" stop-color="#00FF87" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="blurL" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="42"/></filter>
+</defs>
+
+<rect width="2480" height="3508" fill="#050708"/>
+
+<rect width="2480" height="3508" fill="url(#grid)" opacity="0.55"/>
+<rect width="2480" height="3508" fill="url(#scan)"/>
+<rect width="2480" height="3508" fill="url(#vig)"/>
+<rect x="80" y="80" width="2320" height="3348" fill="none" stroke="#16241c" stroke-width="2"/>
+<g stroke="#00FF87" stroke-width="5" opacity="0.9" fill="none">
+  <path d="M80 152V80h72"/><path d="M2328 80h72v72"/>
+  <path d="M2400 3356v72h-72"/><path d="M152 3428H80v-72"/>
+</g>
+<text x="1240" y="3320" text-anchor="middle" font-family="IBM Plex Mono" font-weight="400" font-size="30" letter-spacing="6" fill="#3d5748">AUTONOMOUS · SEALED LOOP · ON-DEVICE AI · ZERO SOIL · AUTONOMOUS · SEALED LOOP</text>
+<text x="140" y="172" font-family="Oswald" font-weight="500" font-size="70" letter-spacing="16" fill="#F2F7F3">PROJECT VERDE</text>
+<text x="142" y="240" font-family="IBM Plex Mono" font-weight="400" font-size="30" letter-spacing="9" fill="#6b8577">AUTONOMOUS CULTIVATION SYSTEM</text>
+<g stroke="#00FF87" stroke-width="3" fill="none" opacity="0.20" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M-10 880 H520 L660 1020 H1120 L1260 1160 H1760"/>
+  <path d="M-10 1180 H320 L460 1320 H920 L1060 1460 H1560"/>
+  <path d="M-10 1480 H720 L860 1620 H1320 L1460 1760 H1980"/>
+  <path d="M180 -10 V320 L320 460 V820"/>
+</g>
+<path d="M-10 1780 H420 L560 1920 H1080" stroke="#2a4237" stroke-width="3" fill="none" opacity="0.35"/>
+<g fill="#00FF87" opacity="0.5">
+  <circle cx="520" cy="880" r="8"/><circle cx="1120" cy="1020" r="8"/>
+  <circle cx="320" cy="1180" r="8"/><circle cx="920" cy="1320" r="8"/>
+  <circle cx="720" cy="1480" r="8"/><circle cx="1320" cy="1620" r="8"/>
+  <circle cx="320" cy="460" r="8"/>
+</g>
+<g fill="none" stroke="#00FF87" opacity="0.35">
+  <rect x="1746" y="1146" width="28" height="28"/><rect x="1546" y="1446" width="28" height="28"/>
+  <rect x="1966" y="1746" width="28" height="28"/><rect x="306" y="806" width="28" height="28"/>
+</g>
+<g>
+  <rect x="140" y="2488" width="36" height="5" fill="#00FF87" opacity="0.9"/>
+  <text x="204" y="2520" font-family="IBM Plex Mono" font-weight="500" font-size="38" letter-spacing="4" fill="#d7e8dc">20 GROWING SITES</text>
+  <rect x="140" y="2618" width="36" height="5" fill="#00FF87" opacity="0.9"/>
+  <text x="204" y="2650" font-family="IBM Plex Mono" font-weight="500" font-size="38" letter-spacing="4" fill="#d7e8dc">04 TIERS — CLOSED LOOP</text>
+  <rect x="140" y="2748" width="36" height="5" fill="#00FF87" opacity="0.9"/>
+  <text x="204" y="2780" font-family="IBM Plex Mono" font-weight="500" font-size="38" letter-spacing="4" fill="#d7e8dc">95% LESS WATER THAN SOIL</text>
+</g>
+</svg>

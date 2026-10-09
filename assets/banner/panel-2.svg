@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2480" height="3508" viewBox="0 0 2480 3508">
+
+<defs>
+  <pattern id="grid" width="310" height="310" patternUnits="userSpaceOnUse">
+    <path d="M310 0H0V310" fill="none" stroke="#0e1a14" stroke-width="1.5"/>
+  </pattern>
+  <pattern id="scan" width="8" height="8" patternUnits="userSpaceOnUse">
+    <rect width="8" height="1.4" fill="#ffffff" opacity="0.022"/>
+  </pattern>
+  <radialGradient id="vig" cx="0.5" cy="0.42" r="0.78">
+    <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="0.62" stop-color="#000000" stop-opacity="0"/>
+    <stop offset="1" stop-color="#000000" stop-opacity="0.55"/>
+  </radialGradient>
+  <radialGradient id="glowC" cx="0.5" cy="0.40" r="0.58">
+    <stop offset="0" stop-color="#00FF87" stop-opacity="0.17"/>
+    <stop offset="1" stop-color="#00FF87" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="blurL" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="42"/></filter>
+</defs>
+
+<rect width="2480" height="3508" fill="#050708"/>
+<rect width="2480" height="3508" fill="url(#glowC)"/>
+<rect width="2480" height="3508" fill="url(#grid)" opacity="0.55"/>
+<rect width="2480" height="3508" fill="url(#scan)"/>
+<rect width="2480" height="3508" fill="url(#vig)"/>
+<rect x="80" y="80" width="2320" height="3348" fill="none" stroke="#16241c" stroke-width="2"/>
+<g stroke="#00FF87" stroke-width="5" opacity="0.9" fill="none">
+  <path d="M80 152V80h72"/><path d="M2328 80h72v72"/>
+  <path d="M2400 3356v72h-72"/><path d="M152 3428H80v-72"/>
+</g>
+<text x="1240" y="3320" text-anchor="middle" font-family="IBM Plex Mono" font-weight="400" font-size="30" letter-spacing="6" fill="#3d5748">AUTONOMOUS · SEALED LOOP · ON-DEVICE AI · ZERO SOIL · AUTONOMOUS · SEALED LOOP</text>
+<text x="140" y="170" font-family="IBM Plex Mono" font-weight="500" font-size="30" letter-spacing="6" fill="#5f7a6a">VERDE OS — V3.0.0</text>
+<text x="2340" y="170" text-anchor="end" font-family="IBM Plex Mono" font-weight="500" font-size="30" letter-spacing="6" fill="#5f7a6a">TOWER_01 · DELHI · IN</text>
+<circle cx="1240" cy="1420" r="500" fill="none" stroke="#1d4a33" stroke-width="2.5" stroke-dasharray="4 16" opacity="0.9"/>
+<circle cx="1240" cy="1420" r="500" fill="none" stroke="#00FF87" stroke-width="5" stroke-linecap="round" stroke-dasharray="250 2892" opacity="0.9" transform="rotate(-50 1240 1420)"/>
+<circle cx="1240" cy="1420" r="500" fill="none" stroke="#00FF87" stroke-width="4" stroke-linecap="round" stroke-dasharray="110 3032" opacity="0.6" transform="rotate(150 1240 1420)"/>
+<g transform="translate(1240,1414) rotate(-8) scale(26)" fill="none" stroke="#00FF87" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" filter="url(#blurL)"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></g>
+<g transform="translate(1240,1414) rotate(-8) scale(26)" fill="none" stroke="#F2F7F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></g>
+<text x="1240" y="2520" text-anchor="middle" font-family="Oswald" font-weight="600" font-size="520" letter-spacing="12" fill="#F2F7F3">VERDE</text>
+<rect x="1198" y="2612" width="84" height="6" fill="#00FF87"/>
+<text x="1255" y="2760" text-anchor="middle" font-family="IBM Plex Mono" font-weight="500" font-size="56" letter-spacing="30" fill="#86efac" opacity="0.85">AN ECOSYSTEM</text>
+</svg>
